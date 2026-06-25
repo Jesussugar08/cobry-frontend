@@ -1,16 +1,34 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { login } from '../api/auth'
 
 function Login() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const navigate = useNavigate()
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        try {
+            const respuesta = await login(email, password)
+            localStorage.setItem('token', respuesta.token)
+            navigate('/dashboard')
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
             <div className="bg-gray-900 rounded-xl border border-gray-800 p-8 w-full max-w-md">
                 <h1 className="text-center text-2xl font-bold tracking-tight text-white">Cobry</h1>
                 <p className="mt-2 text-center text-sm text-gray-400">Inicia sesión</p>
 
-                <form className="mt-8 space-y-5">
+                <form onSubmit={handleSubmit} className="mt-8 space-y-5">
                     <div>
                         <label className="text-sm text-gray-400 block mb-1">Correo electronico</label>
                         <input
+                            onChange={(e) => setEmail(e.target.value)}
                             type="email"
                             className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600"
                         />
@@ -19,6 +37,7 @@ function Login() {
                     <div>
                         <label className="text-sm text-gray-400 block mb-1">Contraseña</label>
                         <input
+                            onChange={(e) => setPassword(e.target.value)}
                             type="password"
                             className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600"
                         />
