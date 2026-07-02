@@ -19,7 +19,6 @@ function CreateClient() {
             if (logo) {
                 logoUrl = await uploadLogo(logo)
             }
-
             await axios.post(
                 'http://localhost:3000/api/client',
                 {

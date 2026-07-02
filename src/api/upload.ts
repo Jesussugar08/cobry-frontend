@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 const uploadLogo = async (file: File) => {
-
+    const sanitizedName = file.name.replace(/\s+/g, '-')
+    
     const response = await axios.post('http://localhost:3000/api/upload', {
-        fileName: file.name,
+        fileName: sanitizedName,
         fileType: file.type
     })
 
@@ -16,7 +17,7 @@ const uploadLogo = async (file: File) => {
     })
 
 
-    const cloudFrontUrl = `https://d2z852mysxxlc5.cloudfront.net/${file.name}`
+    const cloudFrontUrl = `https://d2z852mysxxlc5.cloudfront.net/${sanitizedName}`
     return cloudFrontUrl
 
 }
